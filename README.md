@@ -93,6 +93,44 @@ antipasto
 std::cout << dotenv::getenv("DATABASE_USERNAME", "anonymous") << std::endl;
 ```
 
+### Referencing other variables
+
+Other variables can be referenced using either ${VARIABLE} or $VARIABLE.
+
+#### Example: 
+
+Given this program
+
+```cpp
+#include <iostream>
+#include <string>
+#include "dotenv.h"
+
+int main(int argc, char **argv)
+{
+   dotenv::init("resolve.env");
+   std::cout << std::getenv("MESSAGE") << std::endl;
+   return 0;
+}
+```
+
+and this `resolve.env`
+
+```
+TEMPERATURE = cold
+EXTENT      =    "  long  "
+SEASON      = '$EXTENT $TEMPERATURE winter'
+MORE        =    and $TEMPERATURE ice
+CONTAINS    = lots of ${TEMPERATURE} snow $MORE
+MESSAGE     =    I wish you a ${SEASON}, with $CONTAINS
+```
+
+the output becomes
+
+```
+I wish you a   long   cold winter, with lots of cold snow and cold ice
+```
+
 ### Options
 
 By default, if a name is already present in the environment, `dotenv::init()` will replace it with the new value. To preserve existing variables, you must pass the `Preserve` flag.
@@ -116,3 +154,19 @@ the output this time is:
 root
 antipasto
 ```
+
+## Changelog
+
+### 0.9.2
+
+#### Added
+- Add support for referencing other variables in variable definitions
+
+### 0.9.1
+
+#### Added
+- Add wrapper for setenv to support MSVC
+
+### 0.9.0
+
+- Initial version
