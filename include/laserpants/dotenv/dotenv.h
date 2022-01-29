@@ -218,15 +218,14 @@ inline size_t dotenv::find_var_end(const std::string& str, size_t pos, const std
 }
 
 // trim whitespace from left (in place)
+// https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring/217605#217605
 inline void dotenv::ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-            std::not1(std::ptr_fun<int, int>(std::isspace))));
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {return !std::isspace(ch); }));
 }
 
 // trim whitespace from right (in place)
 inline void dotenv::rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-            std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
 }
 
 // trim both ends (in place)
